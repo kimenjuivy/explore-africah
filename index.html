@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>African Countries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .country-slider {
+            position: relative;
+            height: 600px;
+            overflow: hidden;
+        }
+        .country-slider .slick-list,
+        .country-slider .slick-track {
+            height: 100%;
+        }
+        .country-slider .slick-slide {
+            height: 600px;
+            transition: all 0.3s ease;
+        }
+        .country-card {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        .country-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .country-card:hover img {
+            transform: scale(1.1);
+        }
+        .country-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .country-card:hover .country-info {
+            transform: translateY(0);
+        }
+        .country-name {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .country-description {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .explore-btn {
+            background-color: #FFA500;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .explore-btn:hover {
+            background-color: #FFD700;
+        }
+        #country-details {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .detail-images .slick-prev,
+        .detail-images .slick-next {
+            z-index: 1;
+        }
+        .detail-images .slick-prev {
+            left: 10px;
+        }
+        .detail-images .slick-next {
+            right: 10px;
+        }
+        .slick-arrow {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 50%;
+            z-index: 10;
+            transform: translateY(-50%);
+            transition: background-color 0.3s ease;
+        }
+
+        .slick-prev {
+            left: 10px;
+        }
+
+        .slick-next {
+            right: 10px;
+        }
+
+        .slick-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .slick-arrow i {
+            font-size: 18px;
+        }
+        #country-details h2, #country-details h3 {
+            font-size: 3rem;
+        }
+
+        #country-details p, #country-details li {
+            font-size: 1.5rem;
+            line-height: 1.75;
+            color: #333;
+        }
+        
+
+        #country-details {
+            padding: 40px;
+        }
+
+        .detail-images {
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+
+        ul#detail-attractions {
+            padding-left: 20px;
+        }
+
+        
+        .image-slide {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-slide img {
+            transition: transform 0.5s ease;
+        }
+
+        .image-slide:hover img {
+            transform: scale(1.1);
+        }
+
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .image-slide:hover .image-caption {
+            transform: translateY(0);
+        }
+
+        .detail-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .detail-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fact-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+       
+        .country-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .country-card:hover .country-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .country-card-front, .country-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .country-card-back {
+            background-color: #2980b9;
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .image-slider {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .slider-container {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+    .slide {
+        flex: 0 0 100%;
+    }
+    .caption {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    .slide:hover .caption {
+        opacity: 1;
+    }
+    </style>
+</head>
+<body class="bg-blue-900 text-white min-h-screen">
+   
+    <header class="py-6 px-4 bg-blue-800">
+        <nav class="flex justify-between items-center container mx-auto">
+            <h1 class="text-3xl font-bold">Africa by I.W.K</h1>
+            <ul class="flex space-x-6">
+                <li><a href="#intro" class="hover:text-yellow-400 transition">Introduction</a></li>
+                <li><a href="#countries" class="hover:text-yellow-400 transition">Countries</a></li>
+                <li><a href="#facts" class="hover:text-yellow-400 transition">Quick Facts</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+ 
+<section id="intro" class="py-20 bg-gradient-to-b from-blue-100 to-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-6xl font-bold mb-12 text-center text-blue-800">Africa: The Cradle of Humanity</h2>
+        <div class="mb-16">
+            <p class="text-2xl mb-8 text-gray-700 leading-relaxed">
+                Africa, the world's second-largest continent, is a land of breathtaking diversity and rich cultural heritage. Spanning over 30.37 million square kilometers, it is home to 54 countries, over 1.4 billion people, and a tapestry of cultures that have shaped human history.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-blue-50 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-3xl font-semibold mb-4 text-blue-600">Geographic Diversity</h3>
+                    <ul class="list-disc list-inside space-y-2 text-xl text-gray-700">
+                        <li>Largest hot desert: Sahara (9.2 million km²)</li>
+                        <li>Longest river: Nile (6,650 km)</li>
+                        <li>Highest peak: Mount Kilimanjaro (5,895 m)</li>
+                        <li>Largest tropical rainforest: Congo Basin (1.8 million km²)</li>
+                    </ul>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-3xl font-semibold mb-4 text-blue-600">Demographic Highlights</h3>
+                    <ul class="list-disc list-inside space-y-2 text-xl text-gray-700">
+                        <li>Population: 1.4 billion (2023 estimate)</li>
+                        <li>Median age: 19.7 years</li>
+                        <li>Languages: Over 2,000 distinct languages</li>
+                        <li>Urbanization rate: 43.5% (2021)</li>
+                    </ul>
+                </div>
+            </div>
+            <p class="text-2xl mb-8 text-gray-700 leading-relaxed">
+                From the vast Sahara Desert in the north to the lush Congo rainforests in the center and the iconic savannas of the Serengeti in the east, Africa's landscapes are as varied as they are awe-inspiring. The continent boasts an unparalleled array of wildlife, including the "Big Five": lions, leopards, elephants, rhinos, and buffalo.
+            </p>
+            <p class="text-2xl text-gray-700 leading-relaxed">
+                Today, Africa stands at the crossroads of tradition and modernity. Its rapidly growing economies, emerging tech hubs, and vibrant youth population are driving change and innovation across the continent. From the bustling markets of Marrakech to the skyscrapers of Nairobi, Africa is a continent on the move, full of energy, potential, and promise for the future.
+            </p>
+        </div>
+        <section id="intro-images" class="py-12 bg-gray-100">
+            <div class="container mx-auto px-4">
+                <h3 class="text-3xl font-bold mb-8 text-center text-blue-800">Glimpses of Africa</h3>
+                <div class="image-slider relative overflow-hidden rounded-xl shadow-2xl">
+                    <div class="slider-container flex transition-transform duration-500 ease-in-out">
+                        <div class="slide min-w-full relative">
+                            <img src="https://cdn.britannica.com/66/94366-050-472C4EAC/sun-savanna-African-Kenya-country.jpg" alt="African savanna" class="w-full h-96 object-cover">
+                            <div class="caption absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                                <h4 class="text-xl font-semibold mb-2">Serengeti Savanna</h4>
+                                <p>The vast plains of the Serengeti, home to the great wildebeest migration.</p>
+                            </div>
+                        </div>
+                        <div class="slide min-w-full relative">
+                            <img src="https://img.freepik.com/premium-photo/vibrant-african-market-is-feast-senses-stalls-are-piled-high-with-colorful-fabrics-spices-fruits_14117-353813.jpg" alt="Vibrant African market" class="w-full h-96 object-cover">
+                            <div class="caption absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                                <h4 class="text-xl font-semibold mb-2">Colorful Markets</h4>
+                                <p>Bustling markets filled with vibrant fabrics, spices, and local crafts.</p>
+                            </div>
+                        </div>
+                        <div class="slide min-w-full relative">
+                            <img src="https://image.jimcdn.com/app/cms/image/transf/dimension=1040x10000:format=jpg/path/s2217cd0bb1220415/image/ie32e9371b35d905c/version/1695552638/ancient-egyptian-pyramids-under-a-golden-sunset.jpg" alt="Ancient Egyptian pyramids" class="w-full h-96 object-cover">
+                            <div class="caption absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                                <h4 class="text-xl font-semibold mb-2">Ancient Wonders</h4>
+                                <p>The pyramids of Egypt, testaments to ancient engineering and culture.</p>
+                            </div>
+                        </div>
+                        <div class="slide min-w-full relative">
+                            <img src="https://media.istockphoto.com/id/171450925/photo/city-skyline-cairo-at-dusk.jpg?s=612x612&w=0&k=20&c=QgH16D-ZccoqYvehYYbWzUzKrN987SUWssU7wbl5cFc=" alt="Modern African city skyline" class="w-full h-96 object-cover">
+                            <div class="caption absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+                                <h4 class="text-xl font-semibold mb-2">Modern Metropolis</h4>
+                                <p>The skyline of Cairo, showcasing Africa's rapid urban development.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300" id="prevBtn">&lt;</button>
+                    <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 font-bold py-2 px-4 rounded-full transition duration-300" id="nextBtn">&gt;</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+        <section id="countries" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-bold mb-12 text-center text-blue-800">Explore Africa's Top 25 Countries</h2>
+                <div class="country-slider max-w-screen-xl mx-auto">
+              
+                </div>
+            </div>
+        </section>
+
+       
+        <section id="country-details" class="fixed inset-0 bg-white z-50 overflow-auto">
+            <div class="container mx-auto px-4 py-12">
+                <button id="close-details" class="absolute top-4 right-4 text-3xl text-blue-600 hover:text-blue-800 transition">&times;</button>
+                <h2 id="detail-country-name" class="text-5xl font-bold mb-8 text-center text-blue-800"></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div>
+                        <div id="detail-images" class="mb-8 detail-images">
+                         
+                        </div>
+                        <div class="bg-blue-100 p-6 rounded-lg shadow-lg detail-section">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800">Quick Facts</h3>
+                            <ul class="space-y-3 text-lg">
+                                <li><strong class="text-blue-600">Capital:</strong> <span id="detail-capital"></span></li>
+                                <li><strong class="text-blue-600">Population:</strong> <span id="detail-population"></span></li>
+                                <li><strong class="text-blue-600">Official Language(s):</strong> <span id="detail-language"></span></li>
+                                <li><strong class="text-blue-600">Area:</strong> <span id="detail-area"></span></li>
+                                <li><strong class="text-blue-600">Currency:</strong> <span id="detail-currency"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="detail-section">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800">Overview</h3>
+                            <p id="detail-description" class="text-lg mb-6 text-gray-700"></p>
+                        </div>
+                        <div class="mb-8 detail-section">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800">Culture & Heritage</h3>
+                            <p id="detail-culture" class="text-lg text-gray-700"></p>
+                        </div>
+                        <div class="mb-8 detail-section">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800">Economy & Development</h3>
+                            <p id="detail-economy" class="text-lg text-gray-700"></p>
+                        </div>
+                        <div class="detail-section">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800">Must-Visit Attractions</h3>
+                            <ul id="detail-attractions" class="list-disc list-inside space-y-2 text-lg text-gray-700"></ul>
+                        </div>
+                        <div class="mt-8 detail-section">
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-800">Historical Timeline</h3>
+                            <ul id="detail-timeline" class="list-none space-y-4 text-lg text-gray-700"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<section id="facts" class="py-20 bg-gradient-to-r from-blue-50 to-green-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-5xl font-bold mb-12 text-center text-blue-800">Fascinating Facts About Africa</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="fun-fact bg-white rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <h4 class="text-2xl font-semibold mb-3 text-green-600">World's Hottest Place</h4>
+                <p class="text-gray-700">Dallol, Ethiopia, holds the record for the highest average annual temperature on Earth at 35°C (95°F).</p>
+            </div>
+            <div class="fun-fact bg-white rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <h4 class="text-2xl font-semibold mb-3 text-green-600">Longest-Reigning Dynasty</h4>
+                <p class="text-gray-700">The Solomonic Dynasty of Ethiopia lasted for 3,000 years, ending in 1974.</p>
+            </div>
+            <div class="fun-fact bg-white rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <h4 class="text-2xl font-semibold mb-3 text-green-600">Largest Frog Species</h4>
+                <p class="text-gray-700">The Goliath frog of Cameroon and Equatorial Guinea can grow up to 32 cm (12.6 inches) in length.</p>
+            </div>
+            <div class="fun-fact bg-white rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <h4 class="text-2xl font-semibold mb-3 text-green-600">Ancient Astronomers</h4>
+                <p class="text-gray-700">The Dogon people of Mali had knowledge of the Sirius star system long before modern astronomers.</p>
+            </div>
+            <div class="fun-fact bg-white rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <h4 class="text-2xl font-semibold mb-3 text-green-600">World's Largest Desert</h4>
+                <p class="text-gray-700">The Sahara Desert, at 3.6 million square miles, is nearly the size of the United States.</p>
+            </div>
+            <div class="fun-fact bg-white rounded-xl p-6 shadow-lg transform hover:scale-105 transition duration-300">
+                <h4 class="text-2xl font-semibold mb-3 text-green-600">Oldest Human Remains</h4>
+                <p class="text-gray-700">The oldest known human remains were found in Ethiopia, dating back about 200,000 years.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="african-diversity" class="py-20 bg-gradient-to-b from-blue-100 to-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-5xl font-bold mb-12 text-center text-blue-800">African Diversity in Numbers</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="stat-card bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-3xl font-semibold mb-4 text-blue-600">Languages</h3>
+                <div class="text-5xl font-bold text-gray-800 mb-2">2,000+</div>
+                <p class="text-gray-600">Distinct languages spoken across the continent</p>
+            </div>
+            <div class="stat-card bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-3xl font-semibold mb-4 text-blue-600">Ethnic Groups</h3>
+                <div class="text-5xl font-bold text-gray-800 mb-2">3,000+</div>
+                <p class="text-gray-600">Different ethnic groups with unique cultures</p>
+            </div>
+            <div class="stat-card bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-3xl font-semibold mb-4 text-blue-600">Population Growth</h3>
+                <div class="text-5xl font-bold text-gray-800 mb-2">2.53%</div>
+                <p class="text-gray-600">Annual population growth rate (2020-2025)</p>
+            </div>
+            <div class="stat-card bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-3xl font-semibold mb-4 text-blue-600">Biodiversity</h3>
+                <div class="text-5xl font-bold text-gray-800 mb-2">25%</div>
+                <p class="text-gray-600">Of the world's bird species found in Africa</p>
+            </div>
+            <div class="stat-card bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-3xl font-semibold mb-4 text-blue-600">Economic Growth</h3>
+                <div class="text-5xl font-bold text-gray-800 mb-2">3.8%</div>
+                <p class="text-gray-600">Projected GDP growth rate for 2024</p>
+            </div>
+            <div class="stat-card bg-white rounded-xl p-6 shadow-lg">
+                <h3 class="text-3xl font-semibold mb-4 text-blue-600">Renewable Energy</h3>
+                <div class="text-5xl font-bold text-gray-800 mb-2">40%</div>
+                <p class="text-gray-600">Of global solar potential is in Africa</p>
+            </div>
+        </div>
+        <div class="mt-12 text-center">
+            <p class="text-xl text-gray-700 mb-6">Africa's diversity extends far beyond these numbers, encompassing a rich tapestry of cultures, ecosystems, and potential for growth and innovation.</p>
+            <a href="#" class="bg-blue-600 text-white py-3 px-6 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300">Explore More African Data</a>
+        </div>
+    </div>
+</section>
+    </main>
+
+  
+    <footer class="bg-blue-600 text-white py-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-lg">&copy; Kimenju Ivy Wangari. All rights reserved.</p>
+            <p class="mt-4 text-lg">Dedicated to celebrating the diversity, richness, and potential of African cultures and nations.</p>
+        </div>
+    </footer>
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script>
+        const countriesData = [
+        {
+        name: 'Nigeria',
+        image: 'https://civilisable.com/wp-content/uploads/2024/03/nigerian-clothes.jpg',
+        description: 'Nigeria, often called the "Giant of Africa," is a land of incredible diversity, vibrant cultures, and economic potential. With over 250 ethnic groups and a population exceeding 200 million, it\'s the most populous country in Africa and a powerhouse of West African culture and commerce.',
+        capital: 'Abuja',
+        population: '206 million (2020 est.)',
+        officialLanguage: 'English',
+        area: '923,768 km² (356,669 sq mi)',
+        currency: 'Nigerian Naira (NGN)',
+        culture: 'Nigerian culture is as diverse as its people, with rich traditions in music, art, and literature. The country has produced world-renowned authors like Chinua Achebe and Wole Soyinka, as well as popular music genres like Afrobeats that have gained international recognition.',
+        economy: 'Nigeria boasts the largest economy in Africa, driven by its vast oil reserves, agricultural production, and a growing technology sector. Lagos, its largest city, is a hub of innovation and entrepreneurship, often referred to as the "Silicon Valley of Africa."',
+        attractions: [
+            'Zuma Rock - an iconic 725m monolith near Abuja',
+            'Yankari National Park - home to diverse wildlife and warm springs',
+            'Lekki Conservation Centre - featuring a 401-meter long canopy walkway',
+            'Olumo Rock - a historic landmark in Abeokuta'
+        ],
+        images: [
+            { url: 'https://weetracker.com/wp-content/uploads/2018/10/lagos.jpg', caption: 'Lagos skyline - Economic hub of West Africa' },
+            { url: 'https://miro.medium.com/v2/resize:fit:1200/0*nDHMZ1wEVqqT6MrK.jpg', caption: 'Vibrant Nigerian market' },
+            { url: 'https://facts.net/wp-content/uploads/2023/08/20-facts-about-yoruba-cultural-festival-1691704100.jpg', caption: 'Traditional Yoruba festival' },
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE30A6IgMqK6YkmH_sU9ft999O5DxqRcQ7Zw&s', caption: 'Niger Delta landscape' }
+        ],
+        timeline: [
+            { year: '1914', event: 'Amalgamation of Northern and Southern Nigeria by British colonial administration' },
+            { year: '1960', event: 'Nigeria gains independence from British rule' },
+            { year: '1967-1970', event: 'Nigerian Civil War (Biafran War)' },
+            { year: '1999', event: 'Return to civilian rule after years of military dictatorship' },
+            { year: '2020', event: 'EndSARS protests highlight calls for police reform and good governance' }
+        ]
+    },
+    {
+        name: 'Kenya',
+        image: 'https://media.istockphoto.com/id/697689066/photo/three-giraffe-in-national-park-of-kenya.jpg?s=612x612&w=0&k=20&c=PkC1FAG_dl35Q89Qrfsr_N7siaC645dy8EmP5SekYCI=',
+        description: 'Kenya, located in East Africa, is renowned for its scenic landscapes, abundant wildlife, and the vibrant culture of its people. From the savannas of the Maasai Mara to the bustling streets of Nairobi, Kenya offers a blend of natural wonders and modern attractions that captivate visitors from around the world.',
+        capital: 'Nairobi',
+        population: '54 million (2021 est.)',
+        officialLanguage: 'Swahili, English',
+        area: '580,367 km² (224,081 sq mi)',
+        currency: 'Kenyan Shilling (KES)',
+        culture: 'Kenyan culture is a vibrant tapestry woven from 44 ethnic groups, each with its own language and traditions. The Maasai, known for their distinctive dress and customs, are perhaps the most internationally recognized. Kenya\'s rich cultural heritage is expressed through music, dance, art, and craft.',
+        economy: 'Kenya has one of the fastest growing economies in Africa, with a diverse economic base including agriculture, manufacturing, and services. It\'s a leader in mobile banking and financial technology, with innovations like M-Pesa revolutionizing access to financial services.',
+        attractions: [
+            'Maasai Mara National Reserve - famous for the annual wildebeest migration',
+            'Mount Kenya - Africa\'s second-highest mountain',
+            'Nairobi National Park - a unique urban wildlife sanctuary',
+            'Lamu Island - a UNESCO World Heritage site known for its preserved Swahili culture'
+        ],
+        images: [
+            { url: 'https://www.lakenakurukenya.com/wp-content/uploads/2021/09/masai-mara-national-reserve.jpg', caption: 'Maasai Mara National Reserve' },
+            { url: 'https://media.istockphoto.com/id/1299026534/photo/nairobi-kenya.jpg?s=612x612&w=0&k=20&c=xwCQ441cTHFBTZpb8ihvVwqqtTZjmees1C3xdJc_nfw=', caption: 'Nairobi skyline' },
+            { url: 'https://www.masaimara.travel/images/Maasai%20Ceremonial%20Dance.jpg', caption: 'Traditional Maasai dancers' },
+            { url: 'https://jenmansafaris.com/wp-content/uploads/2014/08/Mount-Kenya.jpg', caption: 'Mount Kenya' }
+        ],
+        timeline: [
+            { year: '1895', event: 'Kenya becomes a British protectorate' },
+            { year: '1963', event: 'Kenya gains independence from British rule' },
+            { year: '1978', event: 'Daniel arap Moi becomes president, ruling for 24 years' },
+            { year: '2002', event: 'First democratic transfer of power' },
+            { year: '2010', event: 'New constitution adopted, devolving power to 47 counties' }
+        ]
+    },
+    {
+        name: 'Egypt',
+        image: 'https://zakaleexpeditions.com/wp-content/uploads/2020/03/Think-Egypt-Giza-Sphynx-178375366-pius99-copy.jpg',
+        description: 'Egypt is one of the world\'s oldest civilizations, known for its ancient monuments, including the Pyramids of Giza and the Sphinx, as well as the Nile River. With a rich history spanning thousands of years, Egypt continues to captivate visitors with its blend of ancient wonders and modern developments.',
+        capital: 'Cairo',
+        population: '104 million (2021 est.)',
+        officialLanguage: 'Arabic',
+        area: '1,002,450 km² (387,048 sq mi)',
+        currency: 'Egyptian Pound (EGP)',
+        culture: 'Egyptian culture is a blend of ancient traditions and modern Arab influences. It\'s famous for its art, architecture, music, and literature dating back thousands of years. The country\'s cultural heritage is deeply rooted in its pharaonic past, while also embracing Islamic and Coptic traditions.',
+        economy: 'Egypt has a diverse economy including agriculture, tourism, and manufacturing. It is a significant producer of cotton, textiles, and a key player in the shipping industry via the Suez Canal. The country has been working on economic reforms to attract foreign investment and boost growth.',
+        attractions: [
+            'Pyramids of Giza - one of the Seven Wonders of the Ancient World',
+            'Luxor Temple - ancient temple complex in southern Egypt',
+            'Nile River - the world\'s longest river',
+            'Red Sea resorts - popular for diving and snorkeling',
+            'Egyptian Museum in Cairo - home to an extensive collection of ancient Egyptian antiquities'
+        ],
+        images: [
+            { url: 'https://africanian.com/wp-content/uploads/2020/04/Pyramids-of-Giza.jpg', caption: 'Pyramids of Giza' },
+            { url: 'https://t3.ftcdn.net/jpg/05/28/96/86/360_F_528968647_75C1y4AO39bfmb4BeZJaC5HU9Mx9WsQr.jpg', caption: 'Nile River' },
+            { url: 'https://i.pinimg.com/736x/4c/e0/38/4ce0389bb9a730922529e2074840659b.jpg', caption: 'Luxor Temple' },
+            { url: 'https://media.istockphoto.com/id/175210186/photo/baech-resort.jpg?s=612x612&w=0&k=20&c=603qD4T2m2xWE_-jeOf609pNpe7utM3bVVEWaJmjTvc=', caption: 'Red Sea coast' }
+        ],
+        timeline: [
+            { year: '3100 BCE', event: 'Unification of Upper and Lower Egypt' },
+            { year: '2630 BCE', event: 'Construction of the Great Pyramid of Giza' },
+            { year: '31 BCE', event: 'Egypt becomes a province of the Roman Empire' },
+            { year: '641 CE', event: 'Arab conquest of Egypt' },
+            { year: '1922', event: 'Egypt gains independence from British rule' }
+        ]
+    },
+    {
+        name: 'Ghana',
+        image: 'https://seeafricatoday.com/wp-content/uploads/2022/07/Ghana-culture-2-810x544.png',
+        description: 'Ghana, located in West Africa, is famous for its rich history, coastal forts, and as a center for African culture and heritage. Known as the "Gateway to Africa," Ghana has become a symbol of African independence and democracy.',
+        capital: 'Accra',
+        population: '31 million (2021 est.)',
+        officialLanguage: 'English',
+        area: '238,533 km² (92,098 sq mi)',
+        currency: 'Ghanaian Cedi (GHS)',
+        culture: 'Ghanaian culture is a mix of various ethnic groups, most notably the Akan, Ewe, and Ga. It is known for its colorful festivals, traditional drumming, and Kente cloth. The country\'s warm hospitality, known as "Akwaaba," is an integral part of its cultural identity.',
+        economy: 'Ghana\'s economy is diverse, with agriculture (cocoa), mining (gold), and oil production playing key roles. It is one of Africa\'s fastest-growing economies. The country has made significant strides in reducing poverty and improving education and healthcare.',
+        attractions: [
+            'Cape Coast Castle - historic slave trade fort',
+            'Kakum National Park - rainforest reserve with canopy walkways',
+            'Mole National Park - wildlife sanctuary',
+            'Kwame Nkrumah Mausoleum - memorial to Ghana\'s first president',
+            'Lake Volta - one of the world\'s largest artificial lakes'
+        ],
+        images: [
+            { url: 'https://visitghana.com/wp-content/uploads/2018/08/2347_ABS_cape-coast-castle-in-ghana.jpg', caption: 'Cape Coast Castle' },
+            { url: 'https://www.researchgate.net/publication/282115637/figure/fig1/AS:669550026702848@1536644574081/A-picture-of-a-section-of-the-Kakum-National-Park-August-2010-It-is-located-30-km.png', caption: 'Kakum National Park' },
+            { url: 'https://worldbank.scene7.com/is/image/worldbankprod/ghana-mole-national-park-v3?wid=780&hei=439&qlt=85,0&resMode=sharp', caption: 'Mole National Park' },
+            { url: 'https://dnwp63qf32y8i.cloudfront.net/54a4dfb936c9c29585f14481f1bdb4c9360392a3', caption: 'Traditional Ghanaian drummers' }
+        ],
+        timeline: [
+            { year: '1482', event: 'Portuguese build Elmina Castle, first European trading post in Ghana' },
+            { year: '1874', event: 'Ghana becomes a British colony' },
+            { year: '1957', event: 'Ghana gains independence, the first sub-Saharan African country to do so' },
+            { year: '1966', event: 'First military coup d\'état' },
+            { year: '1992', event: 'Return to multi-party democracy' }
+        ]
+    },
+    {
+        name: 'South Africa',
+        image: 'https://plus.unsplash.com/premium_photo-1697730061063-ad499e343f26?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c291dGglMjBhZnJpY2F8ZW58MHx8MHx8fDA%3D',
+        description: 'South Africa is known for its diverse culture, history, and natural beauty. Famous for its wildlife, coastal cities, and landmarks like Table Mountain and Robben Island. Often called the "Rainbow Nation," it represents a melting pot of cultures and a symbol of reconciliation.',
+        capital: 'Pretoria (Executive), Bloemfontein (Judicial), Cape Town (Legislative)',
+        population: '60 million (2021 est.)',
+        officialLanguage: '11 official languages, including Zulu, Xhosa, Afrikaans, and English',
+        area: '1,221,037 km² (471,445 sq mi)',
+        currency: 'South African Rand (ZAR)',
+        culture: 'South Africa has a rich cultural heritage influenced by various ethnic groups including Zulu, Xhosa, Afrikaner, and Indian communities. It is famous for its music, dance, and cuisine. The concept of "Ubuntu" - the belief in a universal bond of sharing that connects all humanity - is central to South African philosophy.',
+        economy: 'South Africa is one of Africas largest economies, known for its mining industry (gold, diamonds) and a growing financial sector. It is a key player in African trade and commerce. The country has a well-developed infrastructure and a stock exchange that ranks among the top 20 in the world.',
+        attractions: [
+            'Kruger National Park - one of Africas largest game reserves',
+            'Table Mountain - iconic flat-topped mountain in Cape Town',
+            'Robben Island - historic site where Nelson Mandela was imprisoned',
+            'Cape Winelands - famous for wine production and scenic views',
+            'Johannesburg - the largest city and economic hub of South Africa'
+        ],
+        images: [
+            { url: 'https://i.assetzen.net/i/f3TqFBRds9M4/w:auto/h:400/q:70.jpg', caption: 'Kruger National Park' },
+            { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Table_Mountain_DanieVDM.jpg/640px-Table_Mountain_DanieVDM.jpg', caption: 'Table Mountain' },
+            { url: 'https://aspirelifestyle.co.za/wp-content/uploads/2021/06/Cape-Winelands-768x488.jpg', caption: 'Cape Winelands' },
+            { url: 'https://thumbs.dreamstime.com/b/zulu-dancers-5430887.jpg', caption: 'Traditional Zulu dancers' }
+        ],
+        timeline: [
+            { year: '1652', event: 'Dutch East India Company establishes a settlement at the Cape' },
+            { year: '1910', event: 'Formation of the Union of South Africa' },
+            { year: '1948', event: 'National Party introduces apartheid' },
+            { year: '1990', event: 'Nelson Mandela released from prison' },
+            { year: '1994', event: 'First democratic elections, end of apartheid' }
+        ]
+    },
+    {
+        name: 'Ethiopia',
+        image: 'https://www.undrr.org/sites/default/files/styles/landscape_16_9/public/2023-12/ethiopia-article-image-cropped.jpg?itok=f0iYn3yi',
+        description: 'Ethiopia, located in the Horn of Africa, is known for its ancient culture, historic churches, and being the only African country that was never colonized. It has a rich history as one of the world’s oldest nations and is the origin of coffee.',
+        capital: 'Addis Ababa',
+        population: '120 million (2023 est.)',
+        officialLanguage: 'Amharic',
+        area: '1,104,300 km² (426,372 sq mi)',
+        currency: 'Ethiopian Birr (ETB)',
+        culture: 'Ethiopian culture is diverse with over 80 ethnic groups. It is known for its Orthodox Christian traditions, ancient churches carved into rock, and the unique cuisine like injera. Music and dance play an important role in cultural festivals and celebrations.',
+        economy: 'Ethiopia’s economy is largely based on agriculture, with coffee being its most famous export. It has also seen rapid growth in manufacturing and construction, making it one of Africa’s fastest-growing economies.',
+        attractions: [
+            'Lalibela - rock-hewn churches',
+            'Simien Mountains - highlands with dramatic landscapes',
+            'Aksum - ancient city with obelisks and archaeological sites',
+            'Blue Nile Falls - spectacular waterfall',
+            'Harar - ancient walled city and UNESCO World Heritage site'
+        ],
+        images: [
+            { url: 'https://www.biblicalarchaeology.org/wp-content/uploads/2016/08/11-1.-Beta-Giyorgis.jpg', caption: 'Rock-Hewn Churches of Lalibela' },
+            { url: 'https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/01/09/14/1073987-182568925283997-1376989486-o.jpg?width=1200', caption: 'Simien Mountains' },
+            { url: 'https://cdn.britannica.com/23/93423-050-107B2836/obelisk-kingdom-Aksum-Ethiopian-name-city.jpg', caption: 'Obelisks of Aksum' },
+            { url: 'https://pbs.twimg.com/media/EwIozybXEAIQwKa.jpg', caption: 'Blue Nile Falls' }
+        ],
+        timeline: [
+            { year: '980 BC', event: 'Kingdom of Aksum is established' },
+            { year: '1270', event: 'Solomonic dynasty begins' },
+            { year: '1896', event: 'Ethiopia defeats Italy in the Battle of Adwa' },
+            { year: '1935', event: 'Italy invades Ethiopia' },
+            { year: '1974', event: 'Haile Selassie is overthrown' }
+        ]
+    },
+    {
+        name: 'Morocco',
+        image: 'https://mindfulmermaid.com/wp-content/uploads/2020/07/Morocco2020_JT_6479.jpg',
+        description: 'Morocco, located in North Africa, is known for its historic cities, diverse landscapes, and rich cultural heritage. It has a mix of Arab, Berber, and European influences, making it a unique and vibrant destination.',
+        capital: 'Rabat',
+        population: '37 million (2021 est.)',
+        officialLanguage: 'Arabic',
+        area: '446,550 km² (172,410 sq mi)',
+        currency: 'Moroccan Dirham (MAD)',
+        culture: 'Moroccan culture is a blend of Arab, Berber, and French influences. It is famous for its music, traditional crafts, and the vibrant souks (markets) in cities like Marrakech. The cuisine, including dishes like tagine and couscous, is central to its cultural identity.',
+        economy: 'Morocco’s economy is driven by agriculture, mining (phosphates), tourism, and manufacturing. It is one of Africa’s most stable economies, with strong growth in sectors like automotive and aerospace manufacturing.',
+        attractions: [
+            'Marrakech Medina - historic city center with souks and palaces',
+            'Hassan II Mosque - iconic mosque in Casablanca',
+            'Sahara Desert - vast sand dunes and camel trekking',
+            'Chefchaouen - blue-painted city in the Rif Mountains',
+            'Fes - historic city known for its medina and ancient university'
+        ],
+        images: [
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQXrYzJuIok56iSQhBm7TFHiqa6x2r2Sw75w&s', caption: 'Medina of Marrakech' },
+            { url: 'https://privatedrivermorocco.com/wp-content/uploads/2024/05/Hassan-II-Mosque.jpg', caption: 'Hassan II Mosque' },
+            { url: 'https://th-thumbnailer.cdn-si-edu.com/8liir7_qgkrwh2o9sa7x6Aonz70=/fit-in/1600x0/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/ee/54/ee546179-a222-470a-8f7e-147ca1adbcc6/42-56923287.jpg', caption: 'Sahara Desert' },
+            { url: 'https://assets.tourhero.com/oezct0k9ym4r7r0szftqpbh0kwj6', caption: 'Chefchaouen' }
+        ],
+        timeline: [
+            { year: '789', event: 'Foundation of the Idrisid dynasty' },
+            { year: '1912', event: 'Morocco becomes a French protectorate' },
+            { year: '1956', event: 'Morocco gains independence from France' },
+            { year: '1975', event: 'Green March to claim Western Sahara' },
+            { year: '1999', event: 'King Mohammed VI ascends the throne' }
+        ]
+    },
+    {
+        name: 'Algeria',
+        image: 'https://media.istockphoto.com/id/985914532/photo/notre-dame-dafrique-a-roman-catholic-basilica-in-algiers-algeria.jpg?s=612x612&w=0&k=20&c=qHjz1p143bdubFqL_0IdnbA0LHu6HIX89L6UbFHLHO0=',
+        description: 'Algeria, located in North Africa, is the largest country in Africa and is known for its vast desert landscapes, historic cities, and rich culture influenced by Arab, Berber, and French heritage.',
+        capital: 'Algiers',
+        population: '44 million (2023 est.)',
+        officialLanguage: 'Arabic',
+        area: '2,381,741 km² (919,595 sq mi)',
+        currency: 'Algerian Dinar (DZD)',
+        culture: 'Algerian culture blends Berber and Arab influences, with a touch of French colonial heritage. Traditional music, such as Raï, and festivals celebrating religious and historical events are significant aspects of its culture.',
+        economy: 'Algeria’s economy is largely based on hydrocarbons, as it is a major exporter of oil and natural gas. Efforts to diversify the economy have included developing agriculture, construction, and manufacturing sectors.',
+        attractions: [
+            'Casbah of Algiers - historic district and UNESCO World Heritage site',
+            'Tassili n’Ajjer - prehistoric rock art in the Sahara',
+            'Oran - coastal city known for its music scene',
+            'Timgad - ancient Roman ruins',
+            'Hoggar Mountains - dramatic mountain range in the desert'
+        ],
+        images: [
+            { url: 'https://media.istockphoto.com/id/985914532/photo/notre-dame-dafrique-a-roman-catholic-basilica-in-algiers-algeria.jpg?s=612x612&w=0&k=20&c=qHjz1p143bdubFqL_0IdnbA0LHu6HIX89L6UbFHLHO0=', caption: 'Casbah of Algiers' },
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl-CRX4xOJCAvW_71FDrf5yhSzrxhB-UMT4A&s', caption: 'Tassili n’Ajjer' },
+            { url: 'https://www.hotelscombined.com/rimg/dimg/92/01/0c6091fc-city-20461-167be288f16.jpg?width=1366&height=768&xhint=1416&yhint=1297&crop=true', caption: 'Oran' },
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLfuyOdxZN6_QudUn3iQlRY3RrIjVALFu4Zg&s', caption: 'Ruins of Timgad' }
+        ],
+        timeline: [
+            { year: '1000 BC', event: 'Early Berber kingdoms established' },
+            { year: '1830', event: 'France begins colonization of Algeria' },
+            { year: '1962', event: 'Algeria gains independence from France' },
+            { year: '1990s', event: 'Civil war and political instability' },
+            { year: '2019', event: 'Protests lead to resignation of President Abdelaziz Bouteflika' }
+        ]
+    },
+    {
+        name: 'Tanzania',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqBFRYDg2YrNbUE8JM_mKLdWN72xmNxu-2kA&s',
+        description: 'Tanzania, located in East Africa, is renowned for its wildlife safaris, Mount Kilimanjaro, and beautiful coastal regions like Zanzibar. It is one of Africa’s most popular tourist destinations.',
+        capital: 'Dodoma (official), Dar es Salaam (economic)',
+        population: '63 million (2023 est.)',
+        officialLanguage: 'Swahili, English',
+        area: '947,303 km² (365,756 sq mi)',
+        currency: 'Tanzanian Shilling (TZS)',
+        culture: 'Tanzanian culture is influenced by over 120 ethnic groups, with the Swahili coast adding Arabic and Islamic influences. Music and dance play vital roles, especially in traditional and ceremonial settings.',
+        economy: 'Tanzania’s economy is primarily based on agriculture, tourism, and mining. The country is one of Africa’s largest producers of gold and also has significant gas reserves.',
+        attractions: [
+            'Mount Kilimanjaro - highest peak in Africa',
+            'Serengeti National Park - famous for wildlife and annual migration',
+            'Ngorongoro Crater - world’s largest inactive volcanic caldera',
+            'Zanzibar - historic island with beautiful beaches and spice tours',
+            'Selous Game Reserve - large wildlife reserve'
+        ],
+        images: [
+            { url: 'https://luteasafaris.com/wp-content/uploads/2023/07/kilimanjaro.jpg', caption: 'Mount Kilimanjaro' },
+            { url: 'https://www.serengeti.com/assets/img/wildlife-spectacle-great-migration-tanzania.jpg', caption: 'Wildebeest Migration in Serengeti' },
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXP58LAOtkzr3l20pEEUhpxTHCsdjcWh-WtQ&s', caption: 'Zanzibar Beaches' },
+            { url: 'https://www.gorillatrekkingtoursandsafaris.com/wp-content/uploads/2024/05/Empakai_Crater_Ngorongoro_Conservation_Area.jpg', caption: 'Ngorongoro Crater' }
+        ],
+        timeline: [
+            { year: '1964', event: 'Formation of Tanzania from the union of Tanganyika and Zanzibar' },
+            { year: '1967', event: 'Arusha Declaration introduces socialism (Ujamaa)' },
+            { year: '1992', event: 'Multi-party democracy introduced' },
+            { year: '1998', event: 'US Embassy bombing in Dar es Salaam' },
+            { year: '2021', event: 'Samia Suluhu Hassan becomes Tanzania’s first female president' }
+        ]
+    },
+    {
+        name: 'Tunisia',
+        image: 'https://i0.wp.com/www.engagingcultures.com/wp-content/uploads/2023/03/Amphitheatre-of-El-Jem-Tunisia-Aerial-view.jpg?ssl=1',
+        description: 'Tunisia, located in North Africa, is known for its Mediterranean coastline, Roman ruins, and as the origin of the Arab Spring. It has a rich blend of Arab and Berber cultures influenced by its long history.',
+        capital: 'Tunis',
+        population: '12 million (2023 est.)',
+        officialLanguage: 'Arabic',
+        area: '163,610 km² (63,170 sq mi)',
+        currency: 'Tunisian Dinar (TND)',
+        culture: 'Tunisian culture is a mix of Arab, Berber, and Mediterranean influences. It is known for its traditional music, handicrafts, and diverse cuisine. The country’s festivals and cultural heritage reflect its long history and diverse identity.',
+        economy: 'Tunisia’s economy is diversified, including agriculture, mining, manufacturing, and tourism. It is one of North Africa’s most economically developed countries, with a growing ICT sector.',
+        attractions: [
+            'Carthage - ancient city with Roman ruins',
+            'El Djem - well-preserved Roman amphitheater',
+            'Sousse Medina - historic city center and UNESCO site',
+            'Djerba - island with beaches and cultural sites',
+            'Matmata - traditional troglodyte houses'
+        ],
+        images: [
+            { url: 'https://cdn.britannica.com/95/153395-050-9EDC78CB/Ruins-baths-Carthage-Tunisia.jpg', caption: 'Carthage Ruins' },
+            { url: 'https://carthagemagazine.com/wp-content/uploads/2021/03/The-El-Jem-Amphitheatre-1024x768.jpg', caption: 'El Djem Amphitheater' },
+            { url: 'https://lumtec.tn/wp-content/uploads/2021/09/medina-souss.jpg', caption: 'Sousse Medina' },
+            { url: 'https://carthagemagazine.com/wp-content/uploads/2022/09/Matmata-Tunisia.jpg', caption: 'Matmata Troglodyte Houses' }
+        ],
+        timeline: [
+            { year: '814 BC', event: 'Carthage founded by Phoenicians' },
+            { year: '1881', event: 'Tunisia becomes a French protectorate' },
+            { year: '1956', event: 'Independence from France' },
+            { year: '2011', event: 'Arab Spring begins, leading to overthrow of President Ben Ali' },
+            { year: '2014', event: 'New democratic constitution adopted' }
+        ]
+    },
+    {
+        name: 'Angola',
+        image: 'https://prod.cdn-medias.theafricareport.com/cdn-cgi/image/q=auto,f=auto,metadata=none,width=732,height=419,fit=cover,gravity=0.5000x0.5000/https://prod.cdn-medias.theafricareport.com/medias/2024/08/09/coverug-1.jpg',
+        description: 'Angola, located in Southern Africa, is known for its oil wealth, diverse wildlife, and beautiful Atlantic coastline. It has emerged from decades of civil war to become one of Africa’s fastest-growing economies.',
+        capital: 'Luanda',
+        population: '35 million (2023 est.)',
+        officialLanguage: 'Portuguese',
+        area: '1,246,700 km² (481,354 sq mi)',
+        currency: 'Angolan Kwanza (AOA)',
+        culture: 'Angolan culture is shaped by its Bantu heritage, Portuguese influence, and colonial history. Music genres like Semba and Kuduro are popular, and traditional dances and festivals play an important role in society.',
+        economy: 'Angola’s economy is heavily reliant on oil exports, which constitute a major portion of its GDP. The country also has significant diamond and mineral resources, and it is working to diversify into agriculture and manufacturing.',
+        attractions: [
+            'Kissama National Park - wildlife reserve with elephants and antelopes',
+            'Benguela - coastal city with beautiful beaches',
+            'Tundavala Gap - dramatic cliff and natural viewpoint',
+            'Calandula Falls - spectacular waterfall',
+            'Lubango - city known for its Christ the Redeemer statue'
+        ],
+        images: [
+            { url: 'https://www.alluringworld.com/wp-content/uploads/2016/08/1-Kalandula.jpg', caption: 'Calandula Falls' },
+            { url: 'https://expatstraveltogether.com/wp-content/uploads/2023/09/angola_miradouro_de_lua-1290x540.jpg', caption: 'Kissama National Park' },
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH0nL0SMu6lGCjg97PV8eLk0TpRxxq1hlCTA&s', caption: 'Tundavala Gap' },
+            { url: 'https://us.images.westend61.de/0001925264j/christ-the-king-statue-overlooking-lubango-angola-africa-RHPLF30510.jpg', caption: 'Christ the Redeemer Statue in Lubango' }
+        ],
+        timeline: [
+            { year: '1484', event: 'Portuguese explorers arrive in Angola' },
+            { year: '1975', event: 'Angola gains independence from Portugal' },
+            { year: '2002', event: 'End of Angolan Civil War' },
+            { year: '2010', event: 'New constitution adopted' },
+            { year: '2017', event: 'João Lourenço becomes president' }
+        ]
+    },
+    {
+        name: 'Senegal',
+        image: 'https://www.tintrips.com/uploads/1/2/6/4/126452014/senegal_orig.jpeg',
+        description: 'Senegal, located in West Africa, is known for its vibrant culture, historic sites, and beautiful coastline. It is often called the “Gateway to West Africa” and has a rich history influenced by French colonialism and African traditions.',
+        capital: 'Dakar',
+        population: '17 million (2023 est.)',
+        officialLanguage: 'French',
+        area: '196,722 km² (75,955 sq mi)',
+        currency: 'West African CFA Franc (XOF)',
+        culture: 'Senegalese culture is known for its music, particularly Mbalax, and its vibrant arts scene. Traditional dance, festivals, and French and Wolof influences are integral to its identity. Hospitality, known as “Teranga,” is a core part of Senegalese culture.',
+        economy: 'Senegal’s economy is diverse, with agriculture, fishing, tourism, and mining being key sectors. Dakar is a major hub for trade and commerce in West Africa.',
+        attractions: [
+            'Gorée Island - historic slave trading post',
+            'Lake Retba (Pink Lake) - famous pink-colored lake',
+            'Djoudj National Bird Sanctuary - bird-watching paradise',
+            'Saloum Delta - UNESCO site with mangroves and wildlife',
+            'Saint-Louis - colonial city with historic architecture'
+        ],
+        images: [
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA0Drl5-dMOf78gTWf56x7JpYU8ky5OpEBDQ&s', caption: 'Gorée Island' },
+            { url: 'https://vajiram-prod.s3.ap-south-1.amazonaws.com/Lake_Retba_f1cb9deced.webp', caption: 'Lake Retba' },
+            { url: 'https://discover-senegal.com/wp-content/uploads/2019/05/BN_15528.jpg', caption: 'Saloum Delta' },
+            { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/St_Louis_night_expblend.jpg/640px-St_Louis_night_expblend.jpg', caption: 'Saint-Louis' }
+        ],
+        timeline: [
+            { year: '1444', event: 'Portuguese arrive on Gorée Island' },
+            { year: '1960', event: 'Independence from France' },
+            { year: '1982', event: 'Formation of Senegambia Confederation with Gambia (dissolved 1989)' },
+            { year: '2000', event: 'Abdoulaye Wade becomes president' },
+            { year: '2012', event: 'Macky Sall elected as president' }
+        ]
+    },
+    {
+        name: 'Uganda',
+        image: 'https://images.unsplash.com/photo-1551357246-1517953bce89?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHVnYW5kYXxlbnwwfHwwfHx8MA%3D%3D',
+        description: 'Uganda, located in East Africa, is known for its diverse wildlife, including mountain gorillas, and beautiful natural landscapes such as Lake Victoria and the Nile River.',
+        capital: 'Kampala',
+        population: '48 million (2023 est.)',
+        officialLanguage: 'English, Swahili',
+        area: '241,038 km² (93,065 sq mi)',
+        currency: 'Ugandan Shilling (UGX)',
+        culture: 'Ugandan culture is diverse, with influences from over 50 ethnic groups. Traditional music, dance, and crafts are important aspects, and hospitality is a key part of Ugandan society.',
+        economy: 'Uganda’s economy is based on agriculture, with coffee being its most significant export. The country also has growing sectors in oil, mining, and tourism.',
+        attractions: [
+            'Bwindi Impenetrable Forest - home to mountain gorillas',
+            'Murchison Falls - dramatic waterfalls on the Nile River',
+            'Lake Victoria - Africa’s largest lake',
+            'Queen Elizabeth National Park - diverse wildlife and bird-watching',
+            'Rwenzori Mountains - famous for hiking and mountain climbing'
+        ],
+        images: [
+            { url: 'https://www.andbeyond.com/wp-content/uploads/sites/5/Magical-encounters-with-the-mountain-gorillas-of-Bwindi.jpg', caption: 'Mountain Gorilla in Bwindi' },
+            { url: 'https://images.squarespace-cdn.com/content/v1/657b302ad0d11e71b22b40c3/1705611080886-91WMHG840UJXNACTETWW/photo_1077.jpg', caption: 'Murchison Falls' },
+            { url: 'https://imgix.brilliant-uganda.com/lake-victoria-2108871_1920.jpg?auto=format,enhance,compress&fit=crop&crop=entropy,faces,focalpoint&w=1880&h=740&q=30', caption: 'Lake Victoria' },
+            { url: 'https://i0.wp.com/www.safari254.com/wp-content/uploads/2015/07/Rwenzori-mountains_overview.jpg', caption: 'Rwenzori Mountains' }
+        ],
+        timeline: [
+            { year: '1894', event: 'British establish protectorate over Uganda' },
+            { year: '1962', event: 'Uganda gains independence from Britain' },
+            { year: '1971', event: 'Idi Amin seizes power in military coup' },
+            { year: '1986', event: 'Yoweri Museveni becomes president' },
+            { year: '2021', event: 'Museveni wins sixth term as president' }
+        ]
+    },
+    {
+        name: 'Zambia',
+        image: 'https://static.wixstatic.com/media/cd8d34_df1ad1377694474e96655243a9577ae4~mv2.jpg/v1/fill/w_568,h_378,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/cd8d34_df1ad1377694474e96655243a9577ae4~mv2.jpg',
+        description: 'Zambia, located in Southern Africa, is known for its stunning natural landscapes, including Victoria Falls and numerous national parks. The country has a rich culture influenced by various ethnic groups.',
+        capital: 'Lusaka',
+        population: '19 million (2023 est.)',
+        officialLanguage: 'English',
+        area: '752,618 km² (290,587 sq mi)',
+        currency: 'Zambian Kwacha (ZMW)',
+        culture: 'Zambian culture is diverse, with over 70 ethnic groups. Traditional music, dance, and ceremonies such as the Kuomboka are important cultural elements, and hospitality is highly valued.',
+        economy: 'Zambia’s economy is primarily based on mining, particularly copper, agriculture, and tourism. The country is working to diversify its economy and develop other sectors.',
+        attractions: [
+            'Victoria Falls - one of the world’s largest waterfalls',
+            'South Luangwa National Park - wildlife and safari destination',
+            'Kafue National Park - one of Africa’s largest parks',
+            'Lake Kariba - popular for fishing and boating',
+            'Livingstone - historic town near Victoria Falls'
+        ],
+        images: [
+            { url: 'https://africanbushcamps.com/wp-content/uploads/2022/02/victoria-falls-5903496_1280-1024x683.webp', caption: 'Victoria Falls' },
+            { url: 'https://i.redd.it/zedepxvfjdpd1.jpeg', caption: 'Elephants in South Luangwa National Park' },
+            { url: 'https://www.4x4selfdriveafrica.com/wp-content/uploads/2018/09/Kafue-National-Park.jpg', caption: 'Kafue National Park' },
+            { url: 'https://hideawaysafrica.com/wp-content/uploads/2021/07/Kariba-Safari-Lodge-1.jpg', caption: 'Lake Kariba' }
+        ],
+        timeline: [
+            { year: '1964', event: 'Zambia gains independence from Britain' },
+            { year: '1991', event: 'Introduction of multi-party democracy' },
+            { year: '2001', event: 'President Levy Mwanawasa elected' },
+            { year: '2014', event: 'Michael Sata passes away; Edgar Lungu becomes president' },
+            { year: '2021', event: 'Hakainde Hichilema elected president' }
+        ]
+    },
+    {
+        name: 'Mozambique',
+        image: 'https://cdn.britannica.com/07/93107-050-A0D6E501/Maputo-Mozambique.jpg',
+        description: 'Mozambique, located in Southeast Africa, is known for its coastline, islands, and marine biodiversity. It has a mix of Portuguese and African cultural influences.',
+        capital: 'Maputo',
+        population: '32 million (2023 est.)',
+        officialLanguage: 'Portuguese',
+        area: '801,590 km² (309,496 sq mi)',
+        currency: 'Mozambican Metical (MZN)',
+        culture: 'Mozambican culture is shaped by Portuguese colonial history and diverse local traditions. Music and dance are integral parts of the culture, with styles like Marrabenta being popular.',
+        economy: 'Mozambique’s economy is primarily based on agriculture, natural gas, and mining. The country also benefits from its tourism industry, with beautiful beaches and islands.',
+        attractions: [
+            'Bazaruto Archipelago - marine park with coral reefs',
+            'Gorongosa National Park - wildlife reserve',
+            'Maputo - capital city with colonial architecture',
+            'Ilha de Moçambique - historic island and UNESCO site',
+            'Quirimbas Islands - remote and beautiful beaches'
+        ],
+        images: [
+            { url: 'https://wildtimessafaris.com/wp-content/uploads/2020/02/Banner-Mozambique-Benguerra-Island.jpg', caption: 'Bazaruto Archipelago' },
+            { url: 'https://news.berkeley.edu/wp-content/uploads/2020/12/CR_3575_BN.jpg', caption: 'Gorongosa National Park' },
+            { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Maputo_seen_from_southeast_-_October_2006.jpg/1200px-Maputo_seen_from_southeast_-_October_2006.jpg', caption: 'Maputo' },
+            { url: 'https://craftedafrica.com/wp-content/uploads/2021/09/Villa-Sands-The-Hotel-The-Island-and-its-People-100.jpg', caption: 'Ilha de Moçambique' }
+        ],
+        timeline: [
+            { year: '1498', event: 'Portuguese explorer Vasco da Gama lands in Mozambique' },
+            { year: '1975', event: 'Mozambique gains independence from Portugal' },
+            { year: '1992', event: 'End of civil war with signing of peace agreement' },
+            { year: '2005', event: 'President Armando Guebuza elected' },
+            { year: '2019', event: 'Cyclone Idai causes widespread damage and flooding' }
+        ]
+    },
+    {
+        name: 'Côte d\'Ivoire',
+        image: 'https://cdn.britannica.com/28/194928-050-D09481CB/Yamoussoukro-Basilica-Cote-dIvoire.jpg',
+        description: 'Côte d\'Ivoire, or Ivory Coast, is located in West Africa and is known for its economic prosperity and cocoa production. It has diverse cultures, including the Baoulé, Senoufo, and Malinké.',
+        capital: 'Yamoussoukro (official), Abidjan (economic)',
+        population: '28 million (2023 est.)',
+        officialLanguage: 'French',
+        area: '322,463 km² (124,504 sq mi)',
+        currency: 'West African CFA Franc (XOF)',
+        culture: 'Côte d\'Ivoire’s culture is influenced by its many ethnic groups, traditional art, and music. The country is known for its vibrant festivals, masks, and dance traditions, particularly among the Baoulé and Dan people.',
+        economy: 'Côte d\'Ivoire’s economy is one of the largest in West Africa, primarily based on agriculture (cocoa, coffee), oil, and mining. It is also a hub for banking and finance in the region.',
+        attractions: [
+            'Basilica of Our Lady of Peace - world’s largest church in Yamoussoukro',
+            'Banco National Park - rainforest reserve in Abidjan',
+            'Grand-Bassam - historic town and UNESCO site',
+            'Taï National Park - UNESCO World Heritage Site with wildlife',
+            'Man - known for its mountains and waterfalls'
+        ],
+        images: [
+            { url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1ebhYlISWzKQohzioWfuF1v738EKFKbVJPw&s', caption: 'Grand-Bassam Beach' },
+            { url: 'https://www.watoosee.com/wp-content/uploads/2023/05/Watoosee_create_a_hyperrealistic_image_of_mount_Nimba_in_ivory__d9faa9b4-d5d6-4824-8dd6-cd1872fbeceb.jpeg', caption: 'Mountains in Man' },
+            { url: 'https://www.alluringworld.com/wp-content/uploads/2018/07/8-Tai-Ivory-Coast.jpg', caption: 'Taï National Park' },
+            { url: 'https://continenttours.com/wp-content/uploads/2023/11/Basilica-of-Our-Lady-of-Peace-of-Yamoussoukro_.jpg', caption: 'Basilica of Our Lady of Peace' }
+        ],
+        timeline: [
+            { year: '1842', event: 'French establish protectorate over coastal areas' },
+            { year: '1960', event: 'Independence from France' },
+            { year: '1999', event: 'First military coup d\'état' },
+            { year: '2010', event: 'Civil conflict following disputed presidential election' },
+            { year: '2020', event: 'Alassane Ouattara re-elected for a third term' }
+        ]
+    },
+            
+]
+document.addEventListener('DOMContentLoaded', function() {
+        const slider = document.querySelector('.slider-container');
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentIndex = 0;
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlider();
+        });
+
+        // Auto-slide every 5 seconds
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlider();
+        }, 5000);
+    });
+
+        $(document).ready(function () {
+            // Initialize country data display
+            countriesData.forEach(country => {
+                $('.country-slider').append(`
+                    <div class="country-card">
+                        <div class="country-card-inner">
+                            <div class="country-card-front">
+                                <img src="${country.image}" alt="${country.name}">
+                            </div>
+                            <div class="country-card-back">
+                                <div class="country-name">${country.name}</div>
+                                <p class="country-description">${country.description.substring(0, 150)}...</p>
+                                <button class="explore-btn" data-country="${country.name}">Explore</button>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            // Initialize the main country slider
+            $('.country-slider').slick({
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+                arrows: true,
+                centerMode: true,
+                centerPadding: '10%',
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1,
+                            arrows: false,
+                            centerMode: false,
+                        }
+                    }
+                ]
+            });
+
+            // Handle "Explore" button click event
+            $(document).on('click', '.explore-btn', function () {
+                const countryName = $(this).data('country');
+                const country = countriesData.find(c => c.name === countryName);
+                if (country) {
+                    showCountryDetails(country);
+                }
+            });
+
+            // Function to close the country details
+            $('#close-details').on('click', function () {
+                $('#country-details').fadeOut();
+            });
+
+            // Function to show country details
+            function showCountryDetails(country) {
+                resetCountryDetails();
+                populateCountryDetails(country);
+                $('#country-details').fadeIn();
+                animateDetailSections();
+            }
+
+            // Function to reset the content
+            function resetCountryDetails() {
+                $('#detail-country-name').text('');
+                $('#detail-description').text('');
+                $('#detail-capital').text('');
+                $('#detail-population').text('');
+                $('#detail-language').text('');
+                $('#detail-area').text('');
+                $('#detail-currency').text('');
+                $('#detail-culture').text('');
+                $('#detail-economy').text('');
+                $('#detail-attractions').empty();
+                $('#detail-timeline').empty();
+                $('#detail-images').empty().removeClass('slick-initialized slick-slider');
+            }
+
+            // Function to populate the country details
+            function populateCountryDetails(country) {
+                $('#detail-country-name').text(country.name);
+                $('#detail-description').text(country.description);
+                $('#detail-capital').text(country.capital);
+                $('#detail-population').text(country.population);
+                $('#detail-language').text(country.officialLanguage);
+                $('#detail-area').text(country.area);
+                $('#detail-currency').text(country.currency);
+                $('#detail-culture').text(country.culture);
+                $('#detail-economy').text(country.economy);
+
+                country.attractions.forEach(attraction => {
+                    $('#detail-attractions').append(`<li>${attraction}</li>`);
+                });
+
+                country.timeline.forEach(event => {
+                    $('#detail-timeline').append(`<li><strong>${event.year}:</strong> ${event.event}</li>`);
+                });
+
+                country.images.forEach(image => {
+                    $('#detail-images').append(`
+                        <div class="image-slide">
+                            <img src="${image.url}" alt="${image.caption}" class="w-full h-64 object-cover">
+                            <p class="image-caption">${image.caption}</p>
+                        </div>
+                    `);
+                });
+
+                $('#detail-images').slick({
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    fade: true,
+                    cssEase: 'linear',
+                    dots: true,
+                    arrows: true
+                });
+            }
+
+            // Function to animate detail sections
+            function animateDetailSections() {
+                $('.detail-section').each(function(index) {
+                    $(this).delay(100 * index).queue(function() {
+                        $(this).addClass('active').dequeue();
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
