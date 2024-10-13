@@ -23,7 +23,7 @@ Git (for cloning the repository)
 Installation
 
 Clone the repo
-shCopygit clone https://github.com/your-username/africa-cradle-of-humanity.git
+shCopygit clone (https://kimenjuivy.github.io/explore-africah/)
 
 Navigate to the project directory
 shCopycd africa-cradle-of-humanity
@@ -31,6 +31,7 @@ shCopycd africa-cradle-of-humanity
 Open index.html in your browser
 
 🖥️ Usage
+
 Navigate through the website to explore:
 
 Scroll through different sections on the main page
@@ -39,6 +40,7 @@ Click on country cards to view detailed information
 Interact with the "African Diversity in Numbers" section
 
 🗂️ Project Structure
+
 Copyafrica-cradle-of-humanity/
 │
 ├── index.html
@@ -52,6 +54,7 @@ Copyafrica-cradle-of-humanity/
 │   └── countries/
 ├── README.md
 └── LICENSE
+
 🤝 Contributing
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
@@ -63,9 +66,12 @@ Open a Pull Request
 
 📜 License
 Distributed under the MIT License. See LICENSE for more information.
+
 📞 Contact
-Your Name - @your_twitter - your.email@example.com
-Project Link: https://github.com/your-username/africa-cradle-of-humanity
+Ivy Wangari - kimenjuivy@gmail.com 
+
+Project Link:(https://kimenjuivy.github.io/explore-africah/)
+
 🙏 Acknowledgments
 
 Tailwind CSS
